@@ -1,6 +1,6 @@
 [submodule "mib-api-gateway"]
 	path = mib-api-gateway
-	url = https://github.com/federicosilvestri/mib-api-gateway.git
+	url = https://github.com/Akraier/mib01-api-gateway
 [submodule "mib-user"]
 	path = mib-user
-	url = https://github.com/federicosilvestri/mib-user.git
+	url = https://github.com/Akraier/mib-user
