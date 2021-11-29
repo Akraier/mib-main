@@ -7,3 +7,4 @@
 [submodule "mib-message"]
 	path = mib-message
 	url = https://github.com/francesboc/mib-message
+	branch = main
