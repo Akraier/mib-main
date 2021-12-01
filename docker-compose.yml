@@ -61,6 +61,7 @@ services:
       - gateway.conf
     environment:
       - USERS_MS_HOST=users_ms_worker
+      - MESSAGES_MS_HOST=messages_ms_worker
     labels:
       - mib.api_gateway_worker
 
@@ -127,6 +128,53 @@ services:
   # separating services by: db_service, migration_service, worker_service
   #
 
+  # -------------------------------------------- #
+  # Messages Microservice                           #
+  # -------------------------------------------- #
+  messages_ms_db:
+    #
+    # Users Microservice Database
+    #
+    image: library/postgres:10
+    restart: on-failure
+    env_file:
+      - messages_ms.conf
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  messages_ms_migrations:
+    #
+    # Messages Microservice Migrations
+    #
+    build: ./mib-message
+    env_file:
+      - messages_ms.conf
+    environment:
+      - POSTGRES_HOST=messages_ms_db
+    restart: on-failure
+    command: flask db upgrade
+    depends_on:
+      messages_ms_db:
+        condition: service_healthy
+
+  messages_ms_worker:
+    #
+    # Messages Microservice Worker node
+    #
+    build: ./mib-message
+    restart: on-failure
+    env_file:
+      - messages_ms.conf
+    environment:
+      - POSTGRES_HOST=messages_ms_db
+    depends_on:
+      messages_ms_db:
+        condition: service_healthy
+      messages_ms_migrations:
+        condition: service_started
 volumes:
   # -------------------------------------------- #
   # Volumes                                      #
