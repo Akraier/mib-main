@@ -229,6 +229,36 @@ services:
         condition: service_healthy
       lottery_ms_migrations:
         condition: service_started
+      lottery_ms_redis: 
+        condition: service_started
+  
+  lottery_ms_redis:
+    #
+    # Lottery Microservice Redis node
+    #
+    image: "redis:alpine"
+    command: redis-server
+    restart: on-failure
+    expose:
+      - "6379"
+
+  lottery_ms_celery:
+    #
+    # Lottery Microservice celery node
+    #
+    build: ./mib-lottery
+    restart: on-failure
+    environment:
+      - POSTGRES_HOST=lottery_ms_db
+    env_file:
+      - lottery_ms.conf
+    image: celery:latest
+    command: celery -A background worker --loglevel=INFO -B
+    depends_on:
+      lottery_ms_worker:
+        condition: service_started
+      lottery_ms_redis:
+        condition: service_started
 
 volumes:
   # -------------------------------------------- #
