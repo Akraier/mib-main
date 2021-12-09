@@ -4,18 +4,21 @@ This is the main repository of Message in a Bottle application, self project of 
 
 ## Team info
 
-- The *squad id* is **<squad_id>**
-- The *team leader* is <team_leader>
+- The *squad id* is **01**
+- The *team leader* is *Jeremy Pierre Jean Bonnefoi*
 
 #### Members
 
-| Name and Surname | Email |
-| ---------------- | ----- |
-|                  |       |
-|                  |       |
-|                  |       |
-|                  |       |
-|                  |       |
+Mark with *bold* the person(s) that has developed this microservice.
+
+|Name and Surname    | Email                         |
+|--------------------|-------------------------------|
+|*Jeremy Pierre Jean Bonnefoi* |j.bonnefoi@studenti.unipi.it   |
+|*Francesco Bocchi*  |f.bocchi1@studenti.unipi.it    |
+|*Vincenzo Diodato*     |v.diodato@studenti.unipi.it    |
+|*Luca Canuzzi*     |l.canuzzi@studenti.unipi.it    |
+|*Gianluca Boschi*     |g.boschi3@studenti.unipi.it    |
+|*Alessandro Di Biase* |a.dibiase5@studenti.unipi.it    |
 
 ## Instructions
 
