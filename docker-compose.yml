@@ -134,7 +134,7 @@ services:
   # -------------------------------------------- #
   messages_ms_db:
     #
-    # Users Microservice Database
+    # Message Microservice Database
     #
     image: library/postgres:10
     restart: on-failure
@@ -171,10 +171,45 @@ services:
       - messages_ms.conf
     environment:
       - POSTGRES_HOST=messages_ms_db
+    ports:
+      - "82:5000"
     depends_on:
       messages_ms_db:
         condition: service_healthy
       messages_ms_migrations:
+        condition: service_started
+      message_ms_redis: 
+        condition: service_started
+  
+  message_ms_redis:
+    #
+    # Message Microservice Redis node
+    #
+    image: "redis:alpine"
+    command: redis-server
+    restart: on-failure
+    expose:
+      - "6379"
+
+  message_ms_celery:
+    #
+    # Message Microservice celery node
+    #
+    #image: "celery-message:latest"
+    build: ./mib-message 
+    restart: on-failure
+    environment:
+      - POSTGRES_HOST=messages_ms_db
+      - REDIS_HOST=message_ms_redis
+      - USERS_MS_HOST=users_ms_worker
+    env_file:
+      - messages_ms.conf
+    image: celery-message:latest
+    command: celery -A background worker --loglevel=INFO -B
+    depends_on:
+      messages_ms_worker:
+        condition: service_started
+      message_ms_redis:
         condition: service_started
 
   #
@@ -224,6 +259,8 @@ services:
       - lottery_ms.conf
     environment:
       - POSTGRES_HOST=lottery_ms_db
+    ports:
+      - "81:5000"
     depends_on:
       lottery_ms_db:
         condition: service_healthy
